@@ -11,7 +11,7 @@ class CoreScaffold extends Command
      *
      * @var string
      */
-    protected $signature = 'core:scaffold {name : Class (singular), e.g User} {columns :  Array Columns, e.g \'{"name":"string", "telephone":"string"}\'}';
+    protected $signature = 'core:scaffold {name : Class (singular), e.g User} {columns* :  Columns with type, e.g name:string telephone:string}';
 
     /**
      * The console command description.
@@ -38,7 +38,15 @@ class CoreScaffold extends Command
     public function handle()
     {
         $name = $this->argument('name');
-        $columns = json_decode($this->argument('columns'), true);
+
+        $columns = array();
+        foreach ($this->argument('columns') as $column) {
+            $key_value = explode(":", $column);
+            $columns[$key_value[0]] = $key_value[1];
+        }
+
+       
+
 
         // creating Admin Controller folder if not exist
         mkdir(app_path("/Http/Controllers/Admin/"), 0755, true);
@@ -48,10 +56,6 @@ class CoreScaffold extends Command
         $this->controller($name, $columns);
         
         $this->view($name, $columns);
-        
-        //$this->request($name);
-
-        //File::append(base_path('routes/api.php'), 'Route::resource(\'' . str_plural(strtolower($name)) . "', '{$name}Controller');");
     }
 
     protected function getStub($type)
