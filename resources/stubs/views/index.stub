@@ -1,0 +1,77 @@
+@extends('layout')
+
+@section('header')
+{{ __('model_{{modelNameSingularLowerCase}}.{{modelNamePluralLowerCase}}') }}
+@endsection
+@section('content')
+
+  @if(session()->get('success'))
+    <div class="alert alert-success">
+      {{ session()->get('success') }}  
+    </div><br />
+  @endif
+
+
+ <a href="{{ route('{{modelNamePluralLowerCase}}.create')}}" class="btn btn-primary">{{ __('general.new') }}  {{ __('model_{{modelNameSingularLowerCase}}.{{modelNameSingularLowerCase}}') }}</a>
+ <br/>
+ <br/>
+
+<div class="box">
+  @if (count(${{modelNamePluralLowerCase}}) == 0) 
+    <div class="text-center"><br/>{{__('general.recordsnotfound')}}<br/><br/></div>
+  @else
+
+  <div class="box-header">
+    <h3 class="box-title">{{ __('model_{{modelNameSingularLowerCase}}.{{modelNamePluralLowerCase}}') }}</h3>
+  </div>
+  <div class="box-body">
+  <div class="dataTables_wrapper form-inline dt-bootstrap">
+  <table class="table table-bordered table-striped data-table" role="grid">
+    <thead>
+        <tr>
+          <td><b>Id</b></td>
+
+          {{headerColumns}}
+          <td style="width: 50px;">{{__('general.actions')}}</td>
+          <td style="width: 50px;">&nbsp;</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(${{modelNamePluralLowerCase}} as ${{modelNameSingularLowerCase}})
+        <tr>
+            <td>{{${{modelNameSingularLowerCase}}->id}}</td>
+            {{bodyColumns}}
+            <td>
+
+              <a href="{{ route('{{modelNamePluralLowerCase}}.edit',${{modelNameSingularLowerCase}}->id)}}" class="btn btn-primary">{{__('general.edit')}}</a>
+              
+            </td>
+            <td>
+              <form action="{{ route('{{modelNamePluralLowerCase}}.destroy', ${{modelNameSingularLowerCase}}->id)}}" method="post">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn btn-danger" type="submit">{{__('general.remove')}}</button>
+              </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+  </table>
+</div>
+</div>
+  @endif
+<div>
+
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function () {
+            $('.data-table').dataTable({
+              "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese-Brasil.json"
+              }
+            });
+        });
+    </script>
+@stop

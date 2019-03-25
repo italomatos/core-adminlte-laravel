@@ -1,0 +1,32 @@
+@extends('layout') 
+
+@section('header')
+{{__('general.update')}} {{ __('model_{{modelNameSingularLowerCase}}.{{modelNameSingularLowerCase}}') }}
+@endsection
+
+@section('content')
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+<br /> 
+@endif
+
+<div class="box box-primary">
+    <div class="box-body">
+        
+        <form method="post" action="{{ route('{{modelNamePluralLowerCase}}.update', ${{modelNameSingularLowerCase}}->id) }}">
+            @method('PATCH') 
+            @csrf
+            
+            {{fieldColumns}}
+
+            <button type="submit" class="btn btn-primary">{{__('general.update')}}</button>
+        </form>
+    </div>
+</div>
+@endsection

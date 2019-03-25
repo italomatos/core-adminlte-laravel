@@ -1,0 +1,72 @@
+<?php
+    namespace App\Http\Controllers\Admin;
+
+    use App\Http\Controllers\Controller;
+    use App\{{modelName}};
+
+    use Illuminate\Http\Request;
+
+    class {{modelName}}Controller extends Controller
+    {
+        public function index()
+        {
+            
+            ${{modelNamePluralLowerCase}} = {{modelName}}::paginate(15);
+            return view('admin.{{modelNamePluralLowerCase}}.index', compact('{{modelNamePluralLowerCase}}'));
+        }
+
+        public function create()
+        {
+            ${{modelNameSingularLowerCase}} = new {{modelName}}();
+            return view('admin.{{modelNamePluralLowerCase}}.create', compact('{{modelNameSingularLowerCase}}'));
+        }
+
+        public function store(Request $request)
+        {
+
+            $validatedData = $request->validate([
+            ]);
+            //${{modelNameSingularLowerCase}} = {{modelName}}::create($validatedData);
+
+            {{settingColumns}};
+
+            ${{modelNameSingularLowerCase}}->save();
+            return redirect('/admin/{{modelNamePluralLowerCase}}')->with('success', '{{modelName}} cadastrado com sucesso.');
+        }
+
+        public function edit({{modelName}} ${{modelNameSingularLowerCase}})
+        {
+            //
+            ${{modelNameSingularLowerCase}} = {{modelName}}::find(${{modelNameSingularLowerCase}}->id);
+            return view('admin.{{modelNamePluralLowerCase}}.edit', compact('{{modelNameSingularLowerCase}}'));      
+        }
+
+        /*public function show($id)
+        {
+            ${{modelNameSingularLowerCase}} = {{modelName}}::findOrFail($id);
+            return response()->json(${{modelNameSingularLowerCase}});
+        }*/
+
+
+        public function update(Request $request, {{modelName}} ${{modelNameSingularLowerCase}})
+        {
+            $request->validate([
+            ]);
+
+            ${{modelNameSingularLowerCase}} = {{modelName}}::find(${{modelNameSingularLowerCase}}->id);
+           
+            {{editSettingColumns}};
+
+            ${{modelNameSingularLowerCase}}->save();
+
+            return redirect('/admin/{{modelNamePluralLowerCase}}')->with('success', '{{modelName}} atualizado!');
+        }
+
+        public function destroy({{modelName}} ${{modelNameSingularLowerCase}})
+        {
+            ${{modelNameSingularLowerCase}} = {{modelName}}::findOrFail(${{modelNameSingularLowerCase}}->id);
+            ${{modelNameSingularLowerCase}}->delete();
+
+            return redirect('/admin/{{modelNamePluralLowerCase}}')->with('success', '{{modelName}} removido com sucesso.');
+        }
+    }

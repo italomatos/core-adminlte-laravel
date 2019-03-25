@@ -1,0 +1,27 @@
+<!-- create.blade.php -->
+@extends('layout')
+
+@section('header')
+{{__('general.new')}} {{ __('model_{{modelNameSingularLowerCase}}.{{modelNameSingularLowerCase}}') }}
+@endsection
+@section('content')
+<div class="box box-primary">
+  <div class="box-body">
+    @if ($errors->any())
+      <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+      </div><br />
+    @endif
+      <form method="post" action="{{ route('{{modelNamePluralLowerCase}}.store') }}">
+          {{fieldColumns}}
+          <button type="submit" class="btn btn-primary">{{__('general.create')}} 
+          {{ __('model_{{modelNameSingularLowerCase}}.{{modelNameSingularLowerCase}}') }}
+          </button>
+      </form>
+  </div>
+</div>
+@endsection
