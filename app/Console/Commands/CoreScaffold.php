@@ -40,6 +40,9 @@ class CoreScaffold extends Command
         $name = $this->argument('name');
         $columns = json_decode($this->argument('columns'), true);
 
+        // creating Admin Controller folder if not exist
+        mkdir(app_path("/Http/Controllers/Admin/"), 0755, true);
+
         $this->migration($name, $columns);
         $this->model($name, $columns);
         $this->controller($name, $columns);
