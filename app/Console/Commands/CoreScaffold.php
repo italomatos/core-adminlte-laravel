@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class CoreScaffold extends Command
 {
-    /**
+     /**
      * The name and signature of the console command.
      *
      * @var string
@@ -45,7 +45,7 @@ class CoreScaffold extends Command
             $columns[$key_value[0]] = $key_value[1];
         }
 
-       
+       $this->routes($name);
 
 
         // creating Admin Controller folder if not exist
@@ -68,6 +68,15 @@ class CoreScaffold extends Command
         return file_get_contents(resource_path("stubs/views/$type.stub"));
     }
 
+    protected function routes($name) {
+        $path = base_path('routes/web.php');
+        $content = file_get_contents($path);
+        $resource_route_string = "Route::resource('/admin/" . strtolower(str_plural($name)) . "', '" . $name . "Controller');";
+
+        if (strpos($content, $resource_route_string) === false) {
+           file_put_contents($path, str_replace("<?php", "<?php ". PHP_EOL . "$resource_route_string ", $content));
+        }
+    }
 
     protected function migration($name, $columns) {
 
